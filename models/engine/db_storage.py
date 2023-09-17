@@ -7,6 +7,7 @@ an engine DBStorage
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
+from sqlalchemy.orm import sessionmaker, scoped_session
 from models.base_model import Base
 from models.city import City
 from models.amenity import Amenity
@@ -32,6 +33,8 @@ class DBStorage():
         database = os.environ.get("HBNB_MYSQL_DB")
         url = f"mysql+mysqldb://{username}:{passwd}@{host}/{database}"
         self.__engine = create_engine(url, pool_pre_ping=True)
+        Session = sessionmaker(bind=self.__engine)
+        self.__session = Session()
         if  os.environ.get('HBNB_ENV') == 'test':
             Base.metadata.dropall(self.__engine)
 
@@ -76,10 +79,8 @@ class DBStorage():
         """
         create all tables in the database
         """
-        # recreate all tables in the database
-        Base.metadata.drop_all(self.__engine)
-        Base.metadata.create_all(self.__engine)
+        #  create a session factory using sessionmaker
+        Session = sessionmaker(bind=self.__engine, expire_on_commit=False)
 
-        # create a new session with scoped session factory
-        self.__session.remove()
-        self.__session = scoped_session(self.__session_factory)
+        # create a thread-safe session using scoped session
+        self.__session = scoped_session(Session)
