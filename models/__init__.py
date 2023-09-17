@@ -2,7 +2,6 @@ import os
 
 choice = os.environ.get('HBNB_TYPE_STORAGE')
 
-print(choice)
 if choice == "db":
     from models.engine.db_storage import DBStorage
     storage = DBStorage()
