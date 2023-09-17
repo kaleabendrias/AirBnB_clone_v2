@@ -29,29 +29,16 @@ class DBStorage:
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
-        """Query on the current database session all objects of a given class.
-        Args:
-            cls (str): The class name to query (optional).
-        Returns:
-            dict: A dictionary with all objects of the given class, or all objects
-                from all classes if cls is None.
-        """
+        """query on the current database session"""
         from console import HBNBCommand
-        objects = {}
-        classes = [cls] if cls else self.classes
-
-        for class_name in classes:
-            cls = HBNBCommand.classes[class_name]
-
-            # Query the database to retrieve all objects of the specified class
-            query_objs = self.__session.query(cls).all()
-
-            # Populate the objects dictionary with the results
-            for obj in query_objs:
-                key = f"{class_name}.{obj.id}"
-                objects[key] = obj
-
-        return objects
+        new_dict = {}
+        for clss in HBNBCommand.classes:
+            if cls is None or cls is HBNBCommand.classes[clss] or cls is clss:
+                objs = self.__session.query(HBNBCommand.classes[clss]).all()
+                for obj in objs:
+                    key = obj.__class__.__name__ + '.' + obj.id
+                    new_dict[key] = obj
+        return (new_dict)
 
 
     def new(self, obj):
