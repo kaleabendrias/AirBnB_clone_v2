@@ -61,6 +61,7 @@ class DBStorage():
         adds new object to the database
         """
         self.__session.add(obj)
+        self.__session.commit()
 
     def save(self):
         """

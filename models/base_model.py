@@ -14,12 +14,12 @@ class BaseModel:
     id = Column(String(60), nullable=False, primary_key=True)
     created_at = Column(
             DateTime,
-            default = datetime.utcnow,
+            default = datetime.utcnow(),
             nullable=False
             )
     updated_at = Column(
             DateTime,
-            default = datetime.utcnow,
+            default = datetime.utcnow(),
             nullable=False
             )
 
@@ -38,8 +38,10 @@ class BaseModel:
                                                      '%Y-%m-%dT%H:%M:%S.%f')
             del kwargs['__class__']
             self.__dict__.update(kwargs)
+            # kwargs being attr
             for key, value in kwargs.items():
-                setattr(self, key, value)
+                if not hasattr(self, key):
+                    setattr(self, key, value)
 
     def __str__(self):
         """Returns a string representation of the instance"""
@@ -61,7 +63,7 @@ class BaseModel:
                           (str(type(self)).split('.')[-1]).split('\'')[0]})
         dictionary['created_at'] = self.created_at.isoformat()
         dictionary['updated_at'] = self.updated_at.isoformat()
-        if ("_sainstance_state" in dictionary):
+        if "_sainstance_state" in dictionary:
             del dictionary[_sa_instance_state]
         return dictionary
 
