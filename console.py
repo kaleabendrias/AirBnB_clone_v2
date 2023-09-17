@@ -165,10 +165,10 @@ class HBNBCommand(cmd.Cmd):
                 return
 
         # Create an instance of the specified class with the provided parameters
-        
-        new_instance = HBNBCommand.classes[class_name](*params)
+        new_instance = HBNBCommand.classes[class_name](**params)
         new_instance.save()
         print(new_instance.id)
+
 
 
 
@@ -252,12 +252,11 @@ class HBNBCommand(cmd.Cmd):
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage._FileStorage__objects.items():
-                if k.split('.')[0] == args:
-                    print_list.append(str(v))
+            for obj_id, obj in storage.all(args).items():
+                print_list.append(obj.to_dict())  # Convert to dictionary
         else:
-            for k, v in storage._FileStorage__objects.items():
-                print_list.append(str(v))
+            for obj_id, obj in storage.all().items():
+                print_list.append(obj.to_dict())
 
         print(print_list)
 
