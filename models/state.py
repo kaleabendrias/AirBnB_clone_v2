@@ -9,9 +9,15 @@ from sqlalchemy.orm import relationship
 class State(BaseModel, Base):
     """ State class """
     __tablename__ = "states"
-    name = Column(String(128), nullable=False)
 
-    if os.environ.get("HBNB_STORAGE_TYPE") == "db":
+    storageType = os.environ.get("HBNB_STORAGE_TYPE")
+
+    if storageType == "db":
+        name = Column(String(128), nullable=False)
+    else:
+        name = ""
+
+    if storageType  == "db":
         cities = relationship(
                 "City",
                 backref="state",
