@@ -31,25 +31,24 @@ class Place(BaseModel, Base):
     # Define the relationship with the Review class based on storage type
     if getenv("HBNB_TYPE_STORAGE", None) == "db":
         reviews = relationship("Review", backref="place", cascade="all, delete-orphan")
-
-    # Define the Many-To-Many relationship with Amenity for DBStorage
-    if getenv("HBNB_TYPE_STORAGE", None) == "db":
-        amenities = relationship(
-            "Amenity",
-            secondary=place_amenity,
-            back_populates="place_amenities",
-            viewonly=False
-        )
-
-    # Define getter and setter for amenities for FileStorage
     else:
+        @property
+        def reviews(self):
+            """Get a list of all linked Reviews."""
+            from models.review import Review
+            review_list = []
+            for review in models.storage.all(Review).values():
+                if review.place_id == self.id:
+                    review_list.append(review)
+            return review_list
+
         @property
         def amenities(self):
             """Getter attribute that returns a list of Amenity instances."""
-            from models.amenity import Amenity
+            from models import storage
             amenity_list = []
             for amenity_id in self.amenity_ids:
-                amenity = models.storage.get("Amenity", amenity_id)
+                amenity = storage.get("Amenity", amenity_id)
                 if amenity:
                     amenity_list.append(amenity)
             return amenity_list
@@ -61,3 +60,10 @@ class Place(BaseModel, Base):
             if isinstance(obj, Amenity):
                 if obj.id not in self.amenity_ids:
                     self.amenity_ids.append(obj.id)
+    
+    amenities = relationship(
+        "Amenity",
+        secondary=place_amenity,
+        back_populates="place_amenities",
+        viewonly=False
+    )
