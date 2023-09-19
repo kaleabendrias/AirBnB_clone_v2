@@ -2,6 +2,7 @@
 """ Console Module """
 import cmd
 import sys
+import re
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -113,64 +114,41 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-    def do_create(self, arg):
-        """Creates a new instance of a class and saves it to JSON file with parameters"""
-        
-        if not arg:
+    def do_create(self, args):
+        """ Create an object of any class"""
+        new = args.split(" ")
+        if not args:
             print("** class name missing **")
             return
-
-        args = arg.split()
-        class_name = args[0]
-
-        if class_name not in HBNBCommand.classes:
+        elif new[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-
-        # Remove the class name from the arguments
-        args = args[1:]
-
-        # Create a dictionary to hold the attribute names and values
-        params = {}
-
-        for arg in args:
-            # Split each argument into key and value based on '='
-            parts = arg.split('=')
-            
-            if len(parts) == 2:
-                key, value = parts
-
-                # Check if the value is a string and format it accordingly
-                if value.startswith('"') and value.endswith('"'):
-                    value = value[1:-1].replace('_', ' ')
-
-                # Check if the value is a float and convert it
-                elif '.' in value:
+        new_instance = HBNBCommand.classes[new[0]]()
+        if len(new) >= 2:
+            new.pop(0)
+            for param in new:
+                if re.search(r'^.*?=.*?$', param):
+                    param = param.split("=")
                     try:
-                        value = float(value)
-                    except ValueError:
-                        pass  # Ignore if it can't be converted
-
-                # Check if the value is an integer and convert it
-                else:
-                    try:
-                        value = int(value)
-                    except ValueError:
-                        pass  # Ignore if it can't be converted
-
-                # Store the key-value pair in the params dictionary
-                params[key] = value
-            else:
-                print("** invalid syntax **")
-                return
-
-        # Create an instance of the specified class with the provided parameters
-        new_instance = HBNBCommand.classes[class_name](**params)
+                        if re.search(r'^"(.*?)"$', param[1]):
+                            param[1] = param[1].strip('"')
+                            param[1] = param[1].replace("_", " ")
+                            param[1] = param[1].replace("\\", "")
+                            setattr(new_instance, param[0], str(param[1]))
+                        elif re.search(r'^\d+\.\d+$', param[1]):
+                            setattr(new_instance, param[0], float(param[1]))
+                        elif re.search(r'^\d+$', param[1]):
+                            setattr(new_instance, param[0], int(param[1]))
+                    except Exception:
+                        continue
+                    if re.search(r'^"(.*?)"$', param[1]):
+                        param[1] = param[1].strip('"')
+                        param[1] = param[1].replace("_", " ")
+                        setattr(new_instance, param[0], str(param[1]))
+                    else:
+                        setattr(new_instance, param[0], param[1])
         new_instance.save()
         print(new_instance.id)
-
-
-
 
     def help_create(self):
         """ Help information for the create method """
@@ -243,26 +221,24 @@ class HBNBCommand(cmd.Cmd):
         print("Destroys an individual instance of a class")
         print("[Usage]: destroy <className> <objectId>\n")
 
-    def do_all(self, arg):
-        """Prints string representations of instances"""
-        import models
+    def do_all(self, args):
+        """ Shows all objects, or all objects of a class"""
+        print_list = []
 
-        args = arg.split()
-
-        if len(args) == 0:
-            obj_dict = models.storage.all()
-        elif args[0] in self.classes:
-            obj_dict = models.storage.all(self.classes[args[0]])
+        obj_dict = storage.all()
+        if args:
+            args = args.split(' ')[0]  # remove possible trailing args
+            if args not in HBNBCommand.classes:
+                print("** class doesn't exist **")
+                return
+            for k, v in obj_dict.items():
+                if k.split('.')[0] == args:
+                    print_list.append(str(v))
         else:
-            print("** class doesn't exist **")
-            return False
+            for k, v in obj_dict.items():
+                print_list.append(str(v))
 
-        obj_list = [str(obj) for obj in obj_dict.values()]
-
-        print("[", end="")
-        print(", ".join(obj_list), end="")
-        print("]")
-
+        print(print_list)
 
     def help_all(self):
         """ Help information for the all command """
