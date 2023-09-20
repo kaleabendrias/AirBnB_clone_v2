@@ -6,6 +6,7 @@ from sqlalchemy.orm import relationship
 from os import getenv
 import models
 
+
 class Place(BaseModel, Base):
     """ A place to stay """
     __tablename__ = "places"
@@ -22,7 +23,12 @@ class Place(BaseModel, Base):
 
     # Define the relationship with the Review class based on storage type
     if getenv("HBNB_TYPE_STORAGE", None) == "db":
-        reviews = relationship("Review", backref="place", cascade="all, delete-orphan")
+        reviews = relationship(
+                "Review",
+                backref="place",
+                cascade="all,
+                delete-orphan"
+                )
     else:
         @property
         def reviews(self):
