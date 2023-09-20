@@ -116,39 +116,33 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        new = args.split(" ")
-        if not args:
-            print("** class name missing **")
-            return
-        elif new[0] not in HBNBCommand.classes:
-            print("** class doesn't exist **")
-            return
-        new_instance = HBNBCommand.classes[new[0]]()
-        if len(new) >= 2:
-            new.pop(0)
-            for param in new:
-                if re.search(r'^.*?=.*?$', param):
-                    param = param.split("=")
+        try:
+            if not line:
+                raise SyntaxError()
+            my_list = line.split(" ")
+
+            kwargs = {}
+            for i in range(1, len(my_list)):
+                key, value = tuple(my_list[i].split("="))
+                if value[0] == '"':
+                    value = value.stri('"').replace("_", " ")
+                else:
                     try:
-                        if re.search(r'^"(.*?)"$', param[1]):
-                            param[1] = param[1].strip('"')
-                            param[1] = param[1].replace("_", " ")
-                            param[1] = param[1].replace("\\", "")
-                            setattr(new_instance, param[0], str(param[1]))
-                        elif re.search(r'^\d+\.\d+$', param[1]):
-                            setattr(new_instance, param[0], float(param[1]))
-                        elif re.search(r'^\d+$', param[1]):
-                            setattr(new_instance, param[0], int(param[1]))
-                    except Exception:
+                        value = eval(value)
+                    except (SyntaxError, NameError):
                         continue
-                    if re.search(r'^"(.*?)"$', param[1]):
-                        param[1] = param[1].strip('"')
-                        param[1] = param[1].replace("_", " ")
-                        setattr(new_instance, param[0], str(param[1]))
-                    else:
-                        setattr(new_instance, param[0], param[1])
-        new_instance.save()
-        print(new_instance.id)
+                    kwargs[key] = value
+                if kwargs == {}:
+                    obj = eval(my_list[0])()
+                else:
+                    obj = eval(my_list[0])(**kwargs)
+                    storage.new(obj)
+                print(obj.id)
+                obj.save()
+        except SyntaxError:
+            print("** class name missing **")
+        except NameError:
+            print("** class doesn't exist **")
 
     def help_create(self):
         """ Help information for the create method """

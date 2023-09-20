@@ -16,7 +16,7 @@ from models.review import Review
 from models.state import State
 from models.user import User
 
-class DBStorage():
+class DBStorage:
     """
     a engine for the database; to save data to the database
     """
@@ -75,12 +75,37 @@ class DBStorage():
         if (obj is not None):
             self.__session.delete(obj)
 
+    def call(self, string):
+        """
+        a public instance method used for executing sql cmds on the
+        class's engine
+        """
+        self.__engine.execute(string)
+
+    def start_session(self):
+        """
+        a public instance method used for executing
+        sql cmds on the class engine
+        """
+        self.__session = DBStorage.Session()
+
+    def stop_session(self):
+        """ a public instance method used for ending a session """
+        self.save()
+        self.__session.close()
+
     def reload(self):
         """
         create all tables in the database
         """
-        #  create a session factory using sessionmaker
-        Session = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        from models.user import User
+        from models.amenity import Amenity
+        from models.place import Place
+        from models.state import State, Base
+        from models.city import City, Base
+        from models.review import Review
 
-        # create a thread-safe session using scoped session
-        self.__session = scoped_session(Session)
+        Base.metadata.create_all(self.__engine)
+
+        DBStorage.Session = scoped_session(sessionmaker(bind=self.__engine, expire_on_commit=False))
+        self.__session = DBStorage.Session()
