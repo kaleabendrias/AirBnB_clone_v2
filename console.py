@@ -116,7 +116,6 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, arg):
         """Creates a new instance of a class and
         saves it to JSON file with parameters"""
-
         if not arg:
             print("** class name missing **")
             return
@@ -165,13 +164,13 @@ class HBNBCommand(cmd.Cmd):
                 print("** invalid syntax **")
                 return
 
-        # Create an instance of the specified class with the provided parameter
+        # Create an instance of the specified class with the provided
         new_instance = HBNBCommand.classes[class_name](**params)
         new_instance.save()
         print(new_instance.id)
 
     def help_create(self):
-        """ Help information for the create method """
+        """Help information for the create method """
         print("Creates a class of any type")
         print("[Usage]: create <className>\n")
 
