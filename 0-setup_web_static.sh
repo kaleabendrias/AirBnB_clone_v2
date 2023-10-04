@@ -28,7 +28,7 @@ sudo chown -R ubuntu:ubuntu /data/
 
 # change the config to server hbnb_static
 nginx_config="/etc/nginx/sites-available/default"
-nginx_alias="location /hbnb_static/ { alias /data/web_static/current/; }"
+nginx_alias="location /hbnb_static/ {\n\t\talias /data/web_static/current/;\n}"
 if ! grep -q "$nginx_alias" "$nginx_config"; then
     sudo sed -i "/server_name _;/a $nginx_alias" "$nginx_config"
 fi
