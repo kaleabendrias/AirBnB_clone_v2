@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+# fabfile to gnerate a tar file of web_static
 from fabric.api import local
 from time import strftime
 from datetime import datetime
