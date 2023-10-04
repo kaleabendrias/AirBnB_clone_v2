@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-# using fabric to create a tar
 from fabric.api import local
 from time import strftime
 from datetime import datetime
