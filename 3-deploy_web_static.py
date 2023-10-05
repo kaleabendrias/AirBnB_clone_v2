@@ -52,7 +52,7 @@ web_static/releases/web_static_{}".format(time_stamp, time_stamp))
 
         # delete the file
         run("rm -rf /data/web_static/releases/\
-web_static_20170315003959/web_static")
+web_static_{}/web_static".format(time_stamp))
         # delete the symbolic link
         run("sudo rm -rf /data/web_static/current")
 
@@ -65,4 +65,9 @@ web_static_{} /data/web_static/current".format(time_stamp))
         return False
 
 
-/data/web_static/current
+def deploy():
+    """Deploy a new version to the server"""
+    archive_path = do_pack()
+    if archive_path is None:
+        return False
+    return do_deploy(archive_path)
