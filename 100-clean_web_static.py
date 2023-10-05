@@ -14,15 +14,13 @@ def do_clean(number=0):
         number = 1
     else:
         number += 1
-    
+
     # delete old archives in cersions folder
     with lcd("versions"):
         local("ls -t | tail -n +\
 {} | xargs -I {{}} rm -f {{}}".format(number))
-    
+
     # delte old archives in /data/web_static_releases
     with cd("/data/web_static/releases"):
         run("ls -t | tail -n +\
 {} | xargs -I {{}} rm -rf {{}}".format(number))
-
-        
