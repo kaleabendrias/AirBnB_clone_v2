@@ -15,7 +15,6 @@ def do_deploy(archive_path):
 
         # uploading the archive
         put(archive_path, "/tmp/")
-        print('here')
 
         # uncompress the archive
         parts = archive_path.split('_')
