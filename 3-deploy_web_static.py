@@ -65,9 +65,4 @@ web_static_{} /data/web_static/current".format(time_stamp))
         return False
 
 
-def deploy():
-    """Deploy a new version to the server"""
-    archive_path = do_pack()
-    if archive_path is None:
-        return False
-    return do_deploy(archive_path)
+/data/web_static/current
