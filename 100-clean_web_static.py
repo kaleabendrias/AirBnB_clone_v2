@@ -20,11 +20,20 @@ def do_clean(number=0):
         # List archives on the remote server
         archives = run('ls -1').split()
 
+        # Filter archives that start with 'web_static_'
+        archives_to_delete = [archive for archive in
+                              archives if archive.startswith('web_static_')]
+
+        # Sort archives by modification time (oldest first)
+        archives = archives.sort()
+
         # Keep only the most recent `number` archives
-        if number < len(archives):
-            archives_to_delete = archives[:-number]
-            for archive in archives_to_delete:
-                run('sudo rm -rf {}'.format(archive))
+        if number < len(archives_to_delete):
+            archives_to_delete = archives_to_delete[:-number]
+
+        # Delete the archives
+        for archive in archives_to_delete:
+            sudo('sudo rm -rf {}'.format(archive))
 
     with lcd('versions'):
         # List local archives
