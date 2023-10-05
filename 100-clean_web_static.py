@@ -2,27 +2,28 @@
 """a Fabric script"""
 from fabric.api import *
 from datetime import datetime
+import os
 
 env.hosts = ['35.175.126.161', '54.164.52.24']
 
 
 def do_clean(number=0):
-    """fabric method"""
-    if int(number) < 0:
-        return
+    """Clean up old archives."""
+    number = int(number)
 
-    archives = sorted(run("ls -1t versions").splitlines())
+    if number < 1:
+        number = 1
 
-    # Remove archives to keep
-    keep = archives[-int(number):]
-    archives = archives[:-int(number)]
+    # Clean local archives
+    with lcd("versions"):
+        local_archives = sorted(os.listdir("."))
+        archives_to_delete = local_archives[:-number]
+        for archive in archives_to_delete:
+            local("rm -f {}".format(archive))
 
-    if len(archives) == 0:
-        return
-
-    for archive in archives:
-        run("rm versions/{}".format(archive))
-
-    # Delete on web servers
+    # Clean remote archives
     with cd("/data/web_static/releases"):
-        run("ls -1t . | tail -n +{} | xargs rm -rf".format(len(keep) + 1))
+        remote_archives = run("ls -tr | grep 'web_static_'").split()
+        archives_to_delete = remote_archives[:-number]
+        for archive in archives_to_delete:
+            run("rm -rf {}".format(archive))
