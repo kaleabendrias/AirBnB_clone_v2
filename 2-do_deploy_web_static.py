@@ -17,11 +17,11 @@ def do_deploy(archive_path):
 
         # uploading the archive
         put(archive_path, "/tmp/")
+        print('here')
 
         # uncompress the archive
         parts = archive_path.split('_')
         time_stamp = parts[2].split(".")[0]
-        print(time_stamp)
         run(f"sudo rm -rf /data/web_static/releases/web_static_{time_stamp}")
         run(f"sudo mkdir -p /data/web_static/releases/web_static_{time_stamp}")
         run(f"sudo tar -xvf /tmp/web_static_{time_stamp}.tgz -C /data/\
@@ -35,7 +35,7 @@ web_static/releases/web_static_{time_stamp}")
 
         # create a new symblolic link
         run(f"sudo ln -sf /data/web_static/releases/\
-            web_static_{time_stamp} /data/web_static/current")
+web_static_{time_stamp} /data/web_static/current")
 
         return True
     except Exception as e:
