@@ -28,7 +28,7 @@ web_static_{}".format(time_stamp))
 web_static/releases/web_static_{}".format(time_stamp))
 
         # delete the archive from web_server
-        run("sudo rm -rf /tmp/web_static_.{}.tgz".format(time_stamp))
+        run("sudo rm -rf /tmp/web_static_{}.tgz".format(time_stamp))
 
         # delete the symbolic link
         run("sudo rm -rf /data/web_static/current")
