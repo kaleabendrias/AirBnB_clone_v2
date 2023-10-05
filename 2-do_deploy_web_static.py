@@ -22,20 +22,20 @@ def do_deploy(archive_path):
         # uncompress the archive
         parts = archive_path.split('_')
         time_stamp = parts[2].split(".")[0]
-        run(f"sudo rm -rf /data/web_static/releases/web_static_{time_stamp}")
-        run(f"sudo mkdir -p /data/web_static/releases/web_static_{time_stamp}")
-        run(f"sudo tar -xvf /tmp/web_static_{time_stamp}.tgz -C /data/\
-web_static/releases/web_static_{time_stamp}")
+        run("sudo rm -rf /data/web_static/releases/web_static_{}".format(time_stamp))
+        run("sudo mkdir -p /data/web_static/releases/web_static_{}".format(time_stamp))
+        run("sudo tar -xvf /tmp/web_static_{time_stamp}.tgz -C /data/\
+web_static/releases/web_static_{}".format(time_stamp))
 
         # delete the archive from web_server
-        run(f"sudo rm -rf /tmp/web_static_{time_stamp}.tgz")
+        run("sudo rm -rf /tmp/web_static_.{}.tgz".format(time_stamp))
 
         # delete the symbolic link
         run("sudo rm -rf /data/web_static/current")
 
         # create a new symblolic link
         run(f"sudo ln -sf /data/web_static/releases/\
-web_static_{time_stamp} /data/web_static/current")
+web_static_{} /data/web_static/current".format(time_stamp))
 
         return True
     except Exception as e:
