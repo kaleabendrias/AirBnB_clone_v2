@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """ a Fabric script that distributes an archive to your web servers"""
-from fabfile.api import *
+from fabric.api import *
 from os import path
 
 
