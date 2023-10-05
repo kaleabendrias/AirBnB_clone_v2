@@ -5,8 +5,6 @@ from os import path
 
 
 env.hosts = ['35.175.126.161', '54.164.52.24']
-env.user = "ubuntu"
-env.key_filename = '~/.ssh/id_rsa'
 
 
 def do_deploy(archive_path):
@@ -22,8 +20,10 @@ def do_deploy(archive_path):
         # uncompress the archive
         parts = archive_path.split('_')
         time_stamp = parts[2].split(".")[0]
-        run("sudo rm -rf /data/web_static/releases/web_static_{}".format(time_stamp))
-        run("sudo mkdir -p /data/web_static/releases/web_static_{}".format(time_stamp))
+        run("sudo rm -rf /data/web_static/releases/\
+web_static_{}".format(time_stamp))
+        run("sudo mkdir -p /data/web_static/releases/\
+web_static_{}".format(time_stamp))
         run("sudo tar -xvf /tmp/web_static_{time_stamp}.tgz -C /data/\
 web_static/releases/web_static_{}".format(time_stamp))
 
