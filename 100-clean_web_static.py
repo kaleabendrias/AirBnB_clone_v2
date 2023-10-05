@@ -9,7 +9,7 @@ env.hosts = ['35.175.126.161', '54.164.52.24']
 
 def do_clean(number=0):
     """ deletes out-of-date archives"""
-    number = 1 if int(number) == 0 else int(number)
+    number = 1 if int(number) == 0 else int(number + 1)
 
     # delete old archives in cersions folder
     with lcd("versions"):
