@@ -32,9 +32,10 @@ web_static/releases/web_static_{}".format(time_stamp, time_stamp))
 
         run('sudo mv /data/web_static/releases/web_static_{}/web_static/* \
 /data/web_static/releases/web_static_{}/'.format(time_stamp, time_stamp))
-        
-        #delete the file
-        run("rm -rf /data/web_static/releases/web_static_20170315003959/web_static")
+
+        # delete the file
+        run("rm -rf /data/web_static/releases/\
+web_static_20170315003959/web_static")
         # delete the symbolic link
         run("sudo rm -rf /data/web_static/current")
 
