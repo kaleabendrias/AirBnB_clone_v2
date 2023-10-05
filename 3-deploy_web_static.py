@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-""" a Fabric script  that creates"""
-from fabric.api import local
+"""a Fabric script  that creates"""
+from fabric.api import *
 from time import strftime
 from datetime import datetime
 import os
