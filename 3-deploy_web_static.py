@@ -11,7 +11,7 @@ env.hosts = ['35.175.126.161', '54.164.52.24']
 
 
 def do_pack():
-    """# creating a tar file"""
+    """creating a tar file"""
     try:
         now = datetime.now()
         local("mkdir -p versions/")
