@@ -26,12 +26,14 @@ def do_clean(number=0):
 
         # Sort archives by modification time (oldest first)
         archives = archives.sort(reverse=True)
+        
+        # Check if there are enough archives to delete
+        if len(archives) > number:
+            archives_to_delete = archives[number:]
 
-        archives_to_delete = archives[number:]
-
-        # Delete the outdated archives
-        for archive in archives_to_delete:
-            sudo('rm -rf {}'.format(archive))
+            # Delete the outdated archives
+            for archive in archives_to_delete:
+                sudo('rm -rf {}'.format(archive))
 
     with lcd('versions'):
         # List local archives
