@@ -21,24 +21,24 @@ def do_clean(number=0):
         archives = run('ls -1').split()
 
         # Filter archives that start with 'web_static_'
-        archives_to_delete = [archive for archive in
-                              archives if archive.startswith('web_static_')]
+        archives = [archive for archive in archives
+if archive.startswith('web_static_')]
 
-        # Sort archives by modification time (oldest first)
-        archives = archives.sort(reverse=True)
-        
-        # Check if there are enough archives to delete
-        if len(archives) > number:
-            archives_to_delete = archives[number:]
+        # Sort archives by modification time (newest first)
+        archives.sort(reverse=True)
 
-            # Delete the outdated archives
-            for archive in archives_to_delete:
-                sudo('rm -rf {}'.format(archive))
+        # Keep only the most recent `number` archives
+        archives_to_delete = archives[number:]
+
+        # Delete the outdated archives
+        for archive in archives_to_delete:
+            sudo('rm -rf {}'.format(archive))
 
     with lcd('versions'):
         # List local archives
         local_archives = local('ls -1', capture=True).split()
 
+        # Keep only the most recent `number` local archives
         if number < len(local_archives):
             local_archives_to_delete = local_archives[number:]
             for archive in local_archives_to_delete:
