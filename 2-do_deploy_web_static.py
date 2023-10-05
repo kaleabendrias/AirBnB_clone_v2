@@ -34,7 +34,7 @@ web_static/releases/web_static_{}".format(time_stamp, time_stamp))
 /data/web_static/releases/web_static_{}/'.format(time_stamp, time_stamp))
 
         # delete the file
-        run("rm -rf /data/web_static/releases/\
+        run("sudo rm -rf /data/web_static/releases/\
 web_static_{}/web_static".format(time_stamp))
         # delete the symbolic link
         run("sudo rm -rf /data/web_static/current")
