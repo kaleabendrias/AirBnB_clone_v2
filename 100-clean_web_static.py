@@ -22,7 +22,7 @@ def do_clean(number=0):
 
         # Filter archives that start with 'web_static_'
         archives = [archive for archive in archives
-if archive.startswith('web_static_')]
+                    if archive.startswith('web_static_')]
 
         # Sort archives by modification time (newest first)
         archives.sort(reverse=True)
