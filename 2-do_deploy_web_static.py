@@ -22,7 +22,7 @@ def do_deploy(archive_path):
         parts = archive_path.split('_')
         time_stamp = parts[2].split(".")[0]
         run(f"sudo rm -rf /data/web_static/releases/web_static_{time_stamp}")
-        run("sudo mkdir -p /data/web_static/releases/web_static_{time_stamp}")
+        run(f"sudo mkdir -p /data/web_static/releases/web_static_{time_stamp}")
         run(f"sudo tar -xvf /tmp/web_static_{time_stamp}.tgz -C /data/\
             web_static/releases/web_static_{time_stamp}")
 
