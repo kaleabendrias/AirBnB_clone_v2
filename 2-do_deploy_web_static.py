@@ -27,13 +27,13 @@ def do_deploy(archive_path):
 web_static/releases/web_static_{time_stamp}")
 
         # delete the archive from web_server
-        run("sudo rm -rf /tmp/web_static_{time_stamp}.tgz")
+        run(f"sudo rm -rf /tmp/web_static_{time_stamp}.tgz")
 
         # delete the symbolic link
         run("sudo rm -rf /data/web_static/current")
 
         # create a new symblolic link
-        run("sudo ln -sf /data/web_static/releases/\
+        run(f"sudo ln -sf /data/web_static/releases/\
             web_static_{time_stamp} /data/web_static/current")
 
         return True
