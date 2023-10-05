@@ -24,7 +24,7 @@ def do_deploy(archive_path):
         run(f"sudo rm -rf /data/web_static/releases/web_static_{time_stamp}")
         run(f"sudo mkdir -p /data/web_static/releases/web_static_{time_stamp}")
         run(f"sudo tar -xvf /tmp/web_static_{time_stamp}.tgz -C /data/\
-            web_static/releases/web_static_{time_stamp}")
+web_static/releases/web_static_{time_stamp}")
 
         # delete the archive from web_server
         run("sudo rm -rf /tmp/web_static_{time_stamp}.tgz")
