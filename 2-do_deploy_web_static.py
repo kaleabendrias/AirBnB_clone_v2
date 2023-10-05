@@ -4,6 +4,9 @@ from fabric.api import *
 from os import path
 
 
+ssh.util.log_to_file("paramiko.log", 10)
+
+
 env.hosts = ['35.175.126.161', '54.164.52.24']
 
 
