@@ -16,28 +16,22 @@ def do_clean(number=0):
     if number < 0:
         number = 0
 
-    # Get a list of all archives in the versions folder
-    archives = sorted(run('ls -1 /data/web_static/releases').split('\n'))
+    with cd('/data/web_static/releases'):
+        # List archives on the remote server
+        archives = run('ls -1').split()
 
-    # Keep only the most recent `number` archives
-    if number >= len(archives):
-        return
+        # Keep only the most recent `number` archives
+        if number < len(archives):
+            archives_to_delete = archives[:-number]
+            for archive in archives_to_delete:
+                run('sudo rm -rf {}'.format(archive))
 
-    archives_to_delete = archives[:-number]
+    with lcd('versions'):
+        # List local archives
+        local_archives = local('ls -1', capture=True).split()
 
-    # Delete archives in versions folder
-    for archive in archives_to_delete:
-        run('rm -f /data/web_static/releases/{}'.format(archive))
-
-    # Get a list of all archives in the local versions folder
-    local_archives = local('ls -1 versions', capture=True).split('\n')
-
-    # Keep only the most recent `number` local archives
-    if number >= len(local_archives):
-        return
-
-    local_archives_to_delete = local_archives[:-number]
-
-    # Delete local archives
-    for archive in local_archives_to_delete:
-        local('sudo rm -f versions/{}'.format(archive))
+        # Keep only the most recent `number` local archives
+        if number < len(local_archives):
+            local_archives_to_delete = local_archives[:-number]
+            for archive in local_archives_to_delete:
+                local('rm -f {}'.format(archive))
