@@ -34,7 +34,7 @@ web_static/releases/web_static_{}".format(time_stamp))
         run("sudo rm -rf /data/web_static/current")
 
         # create a new symblolic link
-        run(f"sudo ln -sf /data/web_static/releases/\
+        run("sudo ln -sf /data/web_static/releases/\
 web_static_{} /data/web_static/current".format(time_stamp))
 
         return True
