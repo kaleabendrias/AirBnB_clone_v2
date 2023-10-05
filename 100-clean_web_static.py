@@ -9,21 +9,15 @@ env.hosts = ['35.175.126.161', '54.164.52.24']
 
 def do_clean(number=0):
     """Clean up old archives."""
-    number = int(number)
+     number = 1 if int(number) == 0 else int(number)
 
-    if number < 1:
-        number = 1
-
-    # Clean local archives
+    archives = sorted(os.listdir("versions"))
+    [archives.pop() for i in range(number)]
     with lcd("versions"):
-        local_archives = sorted(os.listdir("."))
-        archives_to_delete = local_archives[:-number]
-        for archive in archives_to_delete:
-            local("rm -f {}".format(archive))
+        [local("rm ./{}".format(a)) for a in archives]
 
-    # Clean remote archives
     with cd("/data/web_static/releases"):
-        remote_archives = run("ls -tr | grep 'web_static_'").split()
-        archives_to_delete = remote_archives[:-number]
-        for archive in archives_to_delete:
-            run("rm -rf {}".format(archive))
+        archives = run("ls -tr").split()
+        archives = [a for a in archives if "web_static_" in a]
+        [archives.pop() for i in range(number)]
+        [run("rm -rf ./{}".format(a)) for a in archives]
