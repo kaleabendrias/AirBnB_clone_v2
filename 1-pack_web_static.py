@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# fabfile to gnerate a tar file of web_static
+"""fabfile to gnerate a tar file of web_static"""
 from fabric.api import local
 from time import strftime
 from datetime import datetime
@@ -7,7 +7,7 @@ import os
 
 
 def do_pack():
-    # creating a tar file
+    """# creating a tar file"""
     try:
         now = datetime.now()
         local("mkdir -p versions/")
