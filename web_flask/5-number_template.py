@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """web application must be listening on 0.0.0.0"""
 from flask import Flask
+from flask import render_template
 
 
 app = Flask(__name__)
@@ -27,6 +28,16 @@ def c_text(text=None):
 def p_text(text="is cool"):
     sanitize = text.replace("_", " ")
     return f"Python {sanitize}"
+
+
+@app.route("/number/<int:n>", strict_slashes=False)
+def n_int(n):
+    return f"{n} is a number"
+
+
+@app.route('/number_template/<int:n>', strict_slashes=False)
+def display_number_template(n):
+    return render_template('5-number.html', n=n)
 
 
 if __name__ == "__main__":
