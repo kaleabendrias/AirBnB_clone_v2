@@ -13,9 +13,13 @@ class FileStorage:
         if cls is None:
             return FileStorage.__objects
         else:
+            if isinstance(cls, str):
+                cls_name = cls
+            else:
+                cls_name = cls.__name__
             filtered_obj = {}
             for key, obj in FileStorage.__objects.items():
-                if cls.__name__ in key:
+                if cls_name in key:
                     filtered_obj[key] = obj
             return filtered_obj
 
