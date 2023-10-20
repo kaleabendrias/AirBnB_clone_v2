@@ -18,7 +18,7 @@
         <H3>Cities:</H3>
         <UL>
             {% for city in state.cities|sort(attribute="name") %}
-                <li>{{ city.id }}: <b>{{ city.name }}</b></li>
+                <LI>{{ city.id }}: <B>{{ city.name }}</B></LI>
             {% endfor %}
         </UL>
         {% endif %}
